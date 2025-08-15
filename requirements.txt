@@ -1,0 +1,9 @@
+flask
+openai
+openai-whisper
+torch
+flask_cors
+youtube_transcript_api
+groq
+gunicorn
+python-dotenv 
