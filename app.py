@@ -15,13 +15,18 @@ load_dotenv()
 
 # --- Configurations ---
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-if not GROQ_API_KEY:
-    raise ValueError("GROQ_API_KEY environment variable is required. Please set it in Railway dashboard.")
-
-client = Groq(
-    api_key=GROQ_API_KEY,
-)
+client = None
 MODEL = "llama-3.3-70b-versatile"
+
+# Initialize Groq client only if API key is available
+if GROQ_API_KEY:
+    try:
+        client = Groq(api_key=GROQ_API_KEY)
+    except Exception as e:
+        print(f"Failed to initialize Groq client: {e}")
+        client = None
+else:
+    print("Warning: GROQ_API_KEY not set. Summarization will not work.")
 
 app = Flask(__name__)
 CORS(app)
@@ -91,9 +96,9 @@ def health_check():
 
 @app.route('/summarize', methods=['POST'])
 def summarize():
-    # Check if API key is available
-    if not GROQ_API_KEY:
-        return jsonify({"error": "API key not configured"}), 500
+    # Check if Groq client is available
+    if not client:
+        return jsonify({"error": "Groq API not configured. Please set GROQ_API_KEY environment variable."}), 500
     
     data = request.get_json()
     url = data.get("url")
