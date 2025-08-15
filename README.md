@@ -28,10 +28,14 @@ Send a POST request to `/summarize` with a JSON body containing the YouTube URL:
 
 ## Local Development
 
-1. Install dependencies: `pip install -r requirements.txt`
+1. Install dependencies: `pip install -r requirements-dev.txt`
 2. Set your Groq API key in environment variable: `GROQ_API_KEY`
 3. Run: `python app.py`
 4. Server starts at `http://localhost:5000`
+
+## Production Deployment
+
+For Railway deployment, use the lightweight `requirements.txt` which excludes heavy packages like `torch` and `openai-whisper` that are not needed for the core YouTube summarization functionality.
 
 ## Railway Deployment
 
